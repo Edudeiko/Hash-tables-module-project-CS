@@ -1,5 +1,15 @@
 # Hash Tables
 
+Hash tables are arguably the single most important data structure known to developers. Used to implement everything from objects in JavaScript and dictionaries in Python to Memcached over a distributed computer network, hash tables are beloved by programmers for providing key/value storage with constant big-O time complexity for insertion, deletion and search.
+
+We will be looking underneath the hood at how this delightful data structure works and answering questions like, how do hash tables work? What is a hash function? What is a hash collision and how are they handled? What is the “birthday problem”? What do we do when our hash table is full?
+
+You can think of hash tables as extensions of arrays. In class, we will implement arrays and compare them to linked lists. For your project, you will use this knowledge to implement hash tables in Python.
+
+At first glance, this may seem like a silly task. After all, both of these data structures are already built into Python and their implementations are fast, full of features, and of course, already working.
+
+The reason we are doing this isn’t so that when we’re done we will have an implementation of these data structures. We do it so that we can obtain a deeper understanding of how our predecessors have invented elegant solutions to difficult problems so that we are better equipped to to solve the problems we will encounter on the job.
+
 ## Day 1
 
 Task: Implement a basic hash table without collision resolution.
