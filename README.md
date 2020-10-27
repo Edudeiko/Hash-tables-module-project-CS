@@ -31,7 +31,7 @@ Task: Implement a basic hash table without collision resolution.
 
 Test this with:
 
-```
+```python
 python test_hashtable_no_collisions.py
 ```
 
@@ -49,7 +49,7 @@ Task: Implement linked-list chaining for collision resolution.
 
 Test this with:
 
-```
+```python
 python test_hashtable.py
 ```
 
@@ -65,7 +65,7 @@ doubling.
 
 You can test this with both of:
 
-```
+```python
 python test_hashtable.py
 python test_hashtable_resize.py
 ```
