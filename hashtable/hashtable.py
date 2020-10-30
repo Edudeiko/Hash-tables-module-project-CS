@@ -16,8 +16,6 @@ class HashTable:
     """
     A hash table that with `capacity` buckets
     that accepts string keys
-
-    Implement this.
     """
 
     def __init__(self, capacity=MIN_CAPACITY):
@@ -30,26 +28,18 @@ class HashTable:
         Return the length of the list you're using to hold the hash
         table data. (Not the number of items stored in the hash table,
         but the number of slots in the main list.)
-
-        One of the tests relies on this.
-
-        Implement this.
         """
         return self.capacity
 
     def get_load_factor(self):
         """
         Return the load factor for this hash table.
-
-        Implement this.
         """
         return self.items_in_hash_table/self.capacity
 
     def fnv1(self, key):
         """
         FNV-1 Hash, 64-bit
-
-        Implement this, and/or DJB2.
         """
         hash_value = 0x811c9dc5
         fnv_prime = 0x01000193
@@ -64,13 +54,13 @@ class HashTable:
     def djb2(self, key):
         """
         DJB2 hash, 32-bit
-
-        Implement this, and/or FNV-1.
         """
         h_value = 5381
-        for char in key:
+        for char in key.encode():
             # (h_value << 5 + h_value) same as h_value * 33
-            h_value = ((h_value << 5 + h_value) + ord(char)) & 0xffffffff
+            h_value = ((h_value * 33) + char)
+            # if the key is not encode(), use ord(char)
+            # h_value = ((h_value << 5 + h_value) + ord(char))
         return h_value
 
     def hash_index(self, key):
@@ -87,8 +77,6 @@ class HashTable:
         Store the value with the given key.
 
         Hash collisions should be handled with Linked List Chaining.
-
-        Implement this.
         """
         idx = self.hash_index(key)
 
@@ -123,15 +111,15 @@ class HashTable:
         Remove the value stored with the given key.
 
         Print a warning if the key is not found.
-
-        Implement this.
         """
-
+        # find the matching pair of values
+        # and point the previous node of that one
+        # to the next node of the found node
         idx = self.hash_index(key)
         curr = self.storage[idx]
 
         # If no idx --> print error
-        if curr is None:
+        if self.storage[idx] is None:
             print(f"KeyError: {key} Doesn't exist")
             return
 
@@ -154,8 +142,6 @@ class HashTable:
         Retrieve the value stored with the given key.
 
         Returns None if the key is not found.
-
-        Implement this.
         """
         idx = self.hash_index(key)
         curr = self.storage[idx]
@@ -164,7 +150,8 @@ class HashTable:
             if curr.key == key:
                 return curr.value
             curr = curr.next
-        print(f"KeyError: {key} Doesn't exist")
+        return None
+        # print(f"KeyError: {key} Doesn't exist")
 
     def resize(self, new_capacity):
         """
@@ -173,6 +160,7 @@ class HashTable:
 
         Implement this.
         """
+        # resize O(n)
         pass
 
 

@@ -1,0 +1,345 @@
+class HashTableEntry:
+    """
+    Linked List hash table key/value pair
+    """
+    def __init__(self, key, value):
+        self.key = key
+        self.value = value
+        self.next = None
+​
+​
+# Hash table can't have fewer than this many slots
+MIN_CAPACITY = 8
+​
+​
+class HashTable:
+    """
+    A hash table that with `capacity` buckets
+    that accepts string keys
+
+    """
+​
+    def __init__(self, capacity):
+        
+        self.capacity = max(capacity, MIN_CAPACITY)
+        self.storage = [None] * self.capacity
+​
+        self.load = 0
+​
+​
+    def get_num_slots(self):
+        """
+        Return the length of the list you're using to hold the hash
+        table data. (Not the number of items stored in the hash table,
+        but the number of slots in the main list.)
+​
+        One of the tests relies on this.
+​
+        Implement this.
+        """
+        return len(self.storage)
+​
+​
+    def get_load_factor(self):
+        """
+        Return the load factor for this hash table.
+​
+        Implement this.
+        """
+        # Your code here
+​
+# hashing functions used in:
+# git
+# cryptocurrencies
+# hash tables
+# store passwords
+​
+# choose between hashing functions
+## some are fast, some are slow
+​
+# "Can a hash be reversed?"
+# "How/Why not?"
+​
+## What's reversing a hash mean?
+## take a hash number and try to get back to the string it was made from
+​
+## p@$$w0rd
+## 0x23283287ad878f983efc
+​
+# deterministic
+# irreversible
+​
+# an attacker can't reverse, but could try hashing common passwords
+​
+## for a hash table, you want a fast function --> O(1)
+## for passwords, you want a slow function
+​
+​
+​
+​
+# Different strategies to handle collisions?
+## chaining: array of linked lists, with one LL per index, each node.next points to the second element
+## Array of arrays, with one array per index, just append
+## Disallow collisions?
+## Open addressing. Linear probing, quadratic probing. [None, 'hello', 'world', None]
+​
+​
+​
+​
+​
+    def fnv1(self, key):
+        """
+        set hash to 0?
+        maintain a total?
+​
+        - start hash at some large number(FNV_offset_basis)
+        - the hashed variable maintains our total
+​
+        some_big_prime * some_other_big_prime = some_mysterious_number
+​
+        
+        Comp Arch - bitwise operations, including XOR
+​
+        0101010101010
+     ^  1101101011001
+        -------------
+        1000111110011
+​
+​
+        """
+        FNV_offset_basis = 14695981039346656037 
+        FNV_prime = 1099511628211
+        hashed = FNV_offset_basis
+​
+        bytes_to_hash = key.encode()
+​
+        for byte in bytes_to_hash:
+            hashed = hashed * FNV_prime
+​
+            hashed = hashed ^ byte
+​
+        return hashed
+​
+    def djb2(self, key):
+        """
+        DJB2 hash, 32-bit
+​
+        Implement this, and/or FNV-1.
+​
+        unsigned long
+        hash(unsigned char *str)
+        {
+            unsigned long hash = 5381;
+            int c;
+​
+            while (c = *str++)
+                hash = ((hash << 5) + hash) + c; /* hash * 33 + c */
+​
+            return hash;
+        }
+        Left bitshifting
+        Left shift
+                   |
+   0101010101000000
+                   |
+       
+       Why 5381 and * 33? because they work!
+​
+       What's "work" - what makes these good?
+       - irreversible
+       - nice distribution, spreads them out over the array --> minimizes collisions
+        
+        """
+        hashed = 5381
+​
+        bytes_to_hash = key.encode()
+​
+        for byte in bytes_to_hash:
+            hashed = ((hashed << 5) + byte)
+            # hashed = ((hashed * 33) + byte)
+​
+        return hashed
+​
+​
+    def hash_index(self, key):
+        """
+        Take an arbitrary key and return a valid integer index
+        between within the storage capacity of the hash table.
+        """
+        #return self.fnv1(key) % self.capacity
+        return self.djb2(key) % self.capacity
+​
+    def put(self, key, value):
+        """
+        self.put(key, None)
+        -- will break our count!!
+​
+        Store the value with the given key.
+​
+        Hash collisions should be handled with Linked List Chaining.
+​
+        Implement this.
+        """
+        # hash the key - self.hash_index will modulo it
+        idx = self.hash_index(key)
+​
+        # check for a collision
+        if self.storage[idx] != None:
+            print('warning! collision!!!')
+​
+        # insert the value at that location
+        self.storage[idx] = value
+​
+        self.load += 1
+​
+​
+    def delete(self, key):
+        """
+        Remove the value stored with the given key.
+​
+        Print a warning if the key is not found.
+​
+        Implement this.
+​
+        """
+        # hash the key to find index
+        idx = self.hash_index(key)
+​
+        if self.storage[idx] == None:
+            print('Warning! no key!!!')
+​
+        else:
+            self.storage[idx] = None
+​
+            self.load -= 1
+​
+​
+    def get(self, key):
+        """
+        Retrieve the value stored with the given key.
+​
+        Returns None if the key is not found.
+​
+        Implement this.
+        """
+        # Your code here
+​
+​
+    def resize(self, new_capacity):
+        """
+        Changes the capacity of the hash table and
+        rehashes all key/value pairs.
+​
+        Implement this.
+        """
+        # Your code here
+​
+​
+​
+if __name__ == "__main__":
+    ht = HashTable(8)
+​
+
+- hash function + array = hash table
+                 - array full of linked lists
+Quick demo of handling a collision with a LL
+Index     Chain
+0          None
+1          ('foo', 12)  --> ('bar', 42) --> ('xyzzy', 99)
+2          None
+3          ('baz', 13)
+4          None
+5          None
+put('foo', 12) # hash to 1
+put('baz', 13)  # hash to 3
+put('bar', 23) # hash to 1
+put('bar', 42) # overwrite the 23
+put('xyzzy', 99) # hashes to 1 as well!
+get('bar')
+How do we do a get??
+  How do we determine if it's the value we want if we're searching by the key?
+  A: store the key unhashed, and compare as we iterate/traverse down the linked list
+Put?
+  Check if key is in linked list, if so overwite, if not add new Node
+Delete?
+delete('bar')
+    - find the matching pair of values 
+    - point the previous node of that one to the next node of the found node
+Linked Lists
+- Singly linked, node.next
+- Doubly linked, node.next and node.prev
+Node(next: 23_node, value: 12 ) ---> Node(next: None, value: 23)
+class SLL:
+    def __init__(self):
+        self.head = None
+    def get(self, target_value):
+        # start at the head
+        node = self.head
+        while node is not None:
+        # check for the target value
+            if node.value == target_value:
+                return node
+        # move to next node
+            else:
+                node = node.next
+    def delete(self, target_value):
+        # if it's head
+        # if LL is empty
+        if not self.head:
+            return False
+        if self.head.value == target_value:
+            self.head = self.head.next
+        prev_node = self.head
+        cur_node = self.head.next
+        while cur_node is not None:
+            if cur_node.value == target_value:
+                prev_node.next = cur_node.next
+            else:
+                prev_node = cur_node
+                cur_node = cur_node.next
+class DLL:
+    def __init__(self):
+        self.head = None
+        self.tail = None
+LOAD FACTOR AND RESIZING
+O(1)
+0  -> A
+1  -> B
+2  -> C
+3  -> D -> F
+4  -> E
+5
+O(N)
+0  -> A 
+1  -> B --> G --> L --> M
+2  -> C --> K
+3  -> D --> H
+4  -> E --> J
+5  -> F --> I
+load factor
+(number of elements) / (number of slots)
+1.0
+> 2
+Load factor < 0.7
+If load factor < 0.2, hash table is underloaded, so array is bigger than you need
+How to resize?
+- How do we resize arrays?
+-- make a new array, double the size of the old one
+-- iterate down the old array, and copy every item over
+-- so it's O(n)
+- For a hash table:
+-- double your backing array
+-- iterate down the old array
+--- and traverse down the linked list
+--- then do a put (aka: hash the key, mod key, put into a node)
+Checklist
+- Go down checklist
+- What took me the longest?
+- run, right, fast
+- binary search to debug
+- Could I find what I was looking for?
+Vimium plugin
+games to play vim
+- keyboard macros
+BTW I have no special Vim plugins, I just jump around using standard Vim.
+And I could be faster, I forget to use paragraph jumps and so on.
