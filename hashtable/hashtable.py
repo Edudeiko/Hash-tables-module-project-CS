@@ -18,10 +18,12 @@ class HashTable:
     that accepts string keys
     """
 
-    def __init__(self, capacity=MIN_CAPACITY):
-        self.capacity = capacity  # Number of buckets in the hash table
-        self.storage = [None] * capacity
-        self.items_in_hash_table = 0  # Number of keys in hash table
+    def __init__(self, capacity):
+        # Number of buckets in the hash table
+        self.capacity = max(capacity, MIN_CAPACITY)
+        self.storage = [None] * self.capacity
+        # Number of keys in hash table
+        self.items_in_hash_table = 0
 
     def get_num_slots(self):
         """
@@ -35,7 +37,7 @@ class HashTable:
         """
         Return the load factor for this hash table.
         """
-        return self.items_in_hash_table/self.capacity
+        return self.items_in_hash_table / self.capacity
 
     def fnv1(self, key):
         """
@@ -43,11 +45,9 @@ class HashTable:
         """
         hash_value = 0x811c9dc5
         fnv_prime = 0x01000193
-        fnv_size = 2**32
-        if not isinstance(key, bytes):
-            key = key.encode('UTF-8', 'ignore')
-        for byte in key:
-            hash_value = (hash_value * fnv_prime) % fnv_size
+
+        for byte in key.encode('UTF-8', 'ignore'):
+            hash_value = (hash_value * fnv_prime)
             hash_value = hash_value ^ byte
         return hash_value
 
@@ -69,8 +69,8 @@ class HashTable:
         between within the storage capacity of the hash table.
         """
 
-        # return self.fnv1(key) % self.capacity
-        return self.djb2(key) % self.capacity
+        return self.fnv1(key) % self.capacity
+        # return self.djb2(key) % self.capacity
 
     def put(self, key, value):
         """
@@ -86,25 +86,25 @@ class HashTable:
             self.items_in_hash_table += 1
 
             # if load factor exceeds 0.66, resize
-            # if self.get_load_factor() > 0.66:
-            #     self.resize(self.capacity * 2)
-            # return
+            if self.get_load_factor() > 0.66:
+                self.resize(self.capacity * 2)
+            return
 
         # If not empty --> if key already exists, overwrite
-        curr = self.storage[idx]
-        while curr is not None:
-            if curr.key == key:
-                curr.value = value
+        while self.storage[idx] is not None:
+            if self.storage[idx].key == key:
+                self.storage[idx].value = value
                 return
-            curr = curr.next
+            self.storage[idx] = self.storage[idx].next
 
-        # If no key --> put at beginning of storage
+        # If no key --> put at the beginning of storage
         head = self.storage[idx]
         self.storage[idx] = HashTableEntry(key, value)
         self.storage[idx].next = head
         self.items_in_hash_table += 1
-        # if self.get_load_factor() > 0.66:
-        #     self.resize(self, )
+
+        if self.get_load_factor() > 0.66:
+            return self.resize(new_capacity*2)
 
     def delete(self, key):
         """
@@ -118,14 +118,9 @@ class HashTable:
         idx = self.hash_index(key)
         curr = self.storage[idx]
 
-        # If no idx --> print error
-        if self.storage[idx] is None:
-            print(f"KeyError: {key} Doesn't exist")
-            return
-
         # If key is in head --> delete
         if curr.key == key:
-            self.storage[idx] = curr.next
+            self.storage[idx] = self.storage[idx].next
             self.items_in_hash_table -= 1
             return curr.value
 
@@ -134,7 +129,7 @@ class HashTable:
             if curr.next.key == key:
                 curr.next == curr.next.next
                 self.items_in_hash_table -= 1
-                return
+                return curr
         print(f"KeyError: {key} Doesn't exist")
 
     def get(self, key):
@@ -144,14 +139,13 @@ class HashTable:
         Returns None if the key is not found.
         """
         idx = self.hash_index(key)
-        curr = self.storage[idx]
 
-        while curr is not None:
-            if curr.key == key:
-                return curr.value
-            curr = curr.next
-        return None
-        # print(f"KeyError: {key} Doesn't exist")
+        while self.storage[idx] is not None:
+            if self.storage[idx].key == key:
+                return self.storage[idx].value
+            self.storage[idx] = self.storage[idx].next
+        # return None
+        print(f"KeyError: {key} Doesn't exist")
 
     def resize(self, new_capacity):
         """
@@ -161,7 +155,14 @@ class HashTable:
         Implement this.
         """
         # resize O(n)
-        pass
+        self.capacity = new_capacity
+        old_storage = self.storage
+        self.storage = new_capacity * [None]
+
+        for curr in old_storage:
+            while curr is not None:
+                self.put(curr.key, curr.value)
+                curr = curr.next
 
 
 if __name__ == "__main__":
