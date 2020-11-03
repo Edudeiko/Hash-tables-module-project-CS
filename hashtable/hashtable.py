@@ -11,9 +11,9 @@ class HashTableEntry:
 myEntry = HashTableEntry('hello', 'world')  # creates an object in memory
 
 
-myEntry.key
-myEntry.value
-myEntry.next
+print(myEntry.key)
+print(myEntry.value)
+print(myEntry.next)
 
 # Hash table can't have fewer than this many slots
 MIN_CAPACITY = 8
@@ -44,6 +44,10 @@ class HashTable:
         """
         Return the load factor for this hash table.
         """
+        # number of items divided by number of buckets
+        # try to keep between 20% and 70%
+        # how are these numbers derived? idk,
+        # academic testing or real-world testing?
         return self.items_in_hash_table / self.capacity
 
     def fnv1(self, key):
@@ -145,6 +149,7 @@ class HashTable:
 
         Returns None if the key is not found.
         """
+        # hash the key to find the index of the value
         idx = self.hash_index(key)
 
         while self.storage[idx] is not None:
@@ -166,10 +171,10 @@ class HashTable:
         old_storage = self.storage
         self.storage = new_capacity * [None]
 
-        for curr in old_storage:
-            while curr is not None:
-                self.put(curr.key, curr.value)
-                curr = curr.next
+        for ii in old_storage:
+            while ii is not None:
+                self.put(ii.key, ii.value)
+                ii = ii.next
 
 
 if __name__ == "__main__":
