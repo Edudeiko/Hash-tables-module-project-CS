@@ -8,6 +8,13 @@ class HashTableEntry:
         self.next = None
 
 
+myEntry = HashTableEntry('hello', 'world')  # creates an object in memory
+
+
+myEntry.key
+myEntry.value
+myEntry.next
+
 # Hash table can't have fewer than this many slots
 MIN_CAPACITY = 8
 
