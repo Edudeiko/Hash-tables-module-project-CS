@@ -12,7 +12,7 @@ to produce the _ciphertext_ (the encrypted text).
 For example, we might have the following mapping (which is the _key_ for
 unlocking this cipher, not to be confused with a hash table key):
 
-```
+```python
 A -> H   B -> Z   C -> Y   D -> W   E -> O
 F -> R   G -> J   H -> D   I -> P   J -> T
 K -> I   L -> G   M -> L   N -> C   O -> E
@@ -71,7 +71,7 @@ decent result, but they're quite close to the real percentages.)
 In other words, ordered from most frequently used to least, the letters
 are:
 
-```
+```python
 'E', 'T', 'A', 'O', 'H', 'N', 'R', 'I', 'S', 'D', 'L', 'W', 'U',
 'G', 'F', 'B', 'M', 'Y', 'C', 'P', 'K', 'V', 'Q', 'J', 'X', 'Z'
 ```
@@ -83,7 +83,7 @@ So if you have a large enough block of ciphertext, you can analyze the
 frequency of letters in there. And if `X` is the most frequent, then
 it's a safe bet that the key includes this mapping:
 
-```
+```python
 E -> X
 ```
 
