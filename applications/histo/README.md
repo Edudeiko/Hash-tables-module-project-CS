@@ -40,7 +40,7 @@ If the input contains no ignored characters, print nothing.
 
 Sample output (truncated):
 
-```
+```python
 the              ################################################
 and              ####################################
 of               ###################################
