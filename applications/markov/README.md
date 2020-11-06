@@ -8,13 +8,13 @@ keep track of all the words that appear _after_ it in the text.
 
 For example, the paragraph:
 
-```
+```text
 Cats and dogs and birds and fish dogs birds
 ```
 
 could be represented:
 
-```
+```text
 Word     Can be followed by
 -------- ------------------
 Cats     and
@@ -30,7 +30,7 @@ following the chain.
 Choosing a word at random to start, `birds`, we see it can only be
 followed by `and`, so we have:
 
-```
+```text
 birds and
 ```
 
@@ -39,7 +39,7 @@ Then we look at see what `and` can be followed by. Looks like `dogs`,
 
 So we choose one at random, say `fish`, and we get:
 
-```
+```text
 birds and fish
 ```
 
@@ -85,25 +85,25 @@ There is no test file for this. Just see if it makes good nonsense.
 
 ## Example Output
 
-```
+```text
 Alice: "warmer, in some part that was very anxious about Looking-glass
 House, if you'll only attend, Kitty, they couldn't, because there are
 the question: it wants plenty of mist now, I wonder if he was through
 the wrong way, beginning to the other," Alice on as she said afterwards
 that Alice watched the table, and the table by the King took no one paw
-went round the fire, as far better manners! 
+went round the fire, as far better manners!
 
 Red Queen, looking over him, and tangles, with the White King, so angry,
 Kitty," Alice picked up snug, you were playing just see one she hardly
-hold you! 
+hold you!
 
-I'll be quite common and putting out of things?" 
+I'll be quite common and putting out of things?"
 
-House! 
+House!
 
 Well then, and unhappy, and made her sister, who was the autumn, when
 the ashes, "Mind the worsted Alice was so wish I shall never, never
-forget!" 
+forget!"
 ```
 
 ## Stretch Goals
