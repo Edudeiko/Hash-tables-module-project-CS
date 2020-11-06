@@ -4,12 +4,11 @@ import re
 import matplotlib.pyplot as plt
 
 from collections import Counter
+
 with open("robin.txt") as f:
     words = f.read()
 
 
-# a = []
-# count = 0
 d = dict()
 # filename = 'robin.txt'
 # with open(filename, 'r') as f:
@@ -27,6 +26,7 @@ d = list(d.items())
 d.sort(reverse=True, key=lambda pair: pair[1])
 
 count = d[0:15]
+print(count)
 
 counts = Counter(count)
 width = 120  # Adjust to desired width
@@ -35,14 +35,15 @@ graph_width = width - longest_key - 2
 widest = counts.most_common(1)[0][1]
 scale = graph_width / float(widest)
 for key, size in counts.items():
-    print('{}: {}'.format(key, int(size * scale) * '*'))
+    print('{}: {}'.format(key, int(size * scale) * '#'))
 
 # num = Counter(d)
-# x = list(num.values())
-# y = list(num.keys())
+x = list(counts.values())
+y = list(counts.keys())
 
-# x_coordinates = np.arange(len(num.keys()))
-# plt.bar(x_coordinates, x)
-# plt.xticks(x_coordinates, y)
-# plt.show()
+x_coordinates = np.arange(len(counts.keys()))
+print(x_coordinates)
+plt.bar(x_coordinates, x)
+plt.xticks(x_coordinates, y)
+plt.show()
 # print(x, y)
