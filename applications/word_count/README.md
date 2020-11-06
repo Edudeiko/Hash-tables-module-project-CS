@@ -4,15 +4,15 @@
 
 This function takes a single string as an argument.
 
-```
-Hello, my cat. And my cat doesn't say "hello" back.
+```python
+'Hello, my cat. And my cat doesn"t say "hello" back.'
 ```
 
 ## Output
 
 It returns a dictionary of words and their counts:
 
-```
+```python
 {'hello': 2, 'my': 2, 'cat': 2, 'and': 1, "doesn't": 1, 'say': 1, 'back': 1}
 ```
 
@@ -24,7 +24,7 @@ Split the strings into words on any whitespace.
 
 Ignore each of the following characters:
 
-```
+```python
 " : ; , . - + = / \ | [ ] { } ( ) * ^ &
 ```
 
